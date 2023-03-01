@@ -5,7 +5,8 @@ class Visualisation():
 
     @staticmethod
     def visualise_predicted_trace(prediction:np.ndarray,inputs:np.ndarray,targets:np.ndarray,plot_title=''):
-        # TODO visualise predicted trace and targets
+        # visualise predicted trace and targets
+        # Last homework, if you haven't done it, you need to do it anyway
         """
 
         :param prediction: model prediction based on inputs (oy for one trace)
@@ -16,5 +17,5 @@ class Visualisation():
         pass
 
     @staticmethod
-    def visualise_error():
+    def visualise_best_models(*args,**kwargs):
         pass
