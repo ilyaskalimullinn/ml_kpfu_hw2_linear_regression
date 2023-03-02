@@ -1,32 +1,43 @@
 import numpy as np
+from typing import Tuple
 
 
 class LinearRegression:
 
     def __init__(self, base_functions: list, reg_coeff: float):
-        self.weights = None  # init weights using np.random.randn (normal distribution with mean=0 and variance=1).
-        # Last homework, if you haven't done it, you need to do it anyway
+        self.weights = np.random.randn(len(base_functions) + 1).reshape(-1, 1)
         self.base_functions = base_functions
         self.reg_coeff = reg_coeff
 
-
-    def __pseudoinverse_matrix(self,matrix: np.ndarray) -> np.ndarray:
+    def __pseudoinverse_matrix(self, matrix: np.ndarray) -> np.ndarray:
         """TODO calculate pseudoinverse matrix with regularization using SVD """
-        pass
+        u, s, v_t = np.linalg.svd(matrix)
+
+        sigma_inverse = self.__inverse_diagonal_matrix(diagonal=s, shape_to_be=(v_t.shape[0], u.shape[1]))
+
+        return v_t.T @ sigma_inverse @ u.T
+
+    def __inverse_diagonal_matrix(self, diagonal: np.ndarray, shape_to_be: Tuple):
+        min_value = np.finfo(float).eps * np.max(diagonal) * max(shape_to_be)
+
+        diagonal_inverse = np.where(diagonal > min_value, diagonal / (diagonal ** 2 + self.reg_coeff), 0)
+
+        matrix = np.zeros(shape=shape_to_be)
+        np.fill_diagonal(matrix, diagonal_inverse)
+        return matrix
 
     def __plan_matrix(self, inputs: np.ndarray) -> np.ndarray:
-        # build Plan matrix using list of lambda functions defined in config. Use only one loop (for base_functions).
-        # Last homework, if you haven't done it, you need to do it anyway
-        pass
+        inputs = inputs.reshape(-1, 1)
+        columns = [np.ones_like(inputs)]
+        for func in self.base_functions:
+            columns.append(func(inputs))
+        return np.hstack(columns)
 
     def __calculate_weights(self, pseudoinverse_plan_matrix: np.ndarray, targets: np.ndarray) -> None:
-        """TODO calculate weights of the model using formula from the lecture"""
-        pass
+        self.weights = pseudoinverse_plan_matrix @ targets.reshape(-1, 1)
 
     def calculate_model_prediction(self, plan_matrix) -> np.ndarray:
-        # calculate prediction of the model (y) using formula from the lecture.
-        # Last homework, if you haven't done it, you need to do it anyway
-        pass
+        return (plan_matrix @ self.weights).flatten()
 
     def train_model(self, inputs: np.ndarray, targets: np.ndarray) -> None:
         # prepare data
@@ -35,7 +46,6 @@ class LinearRegression:
 
         # train process
         self.__calculate_weights(pseudoinverse_plan_matrix, targets)
-
 
     def __call__(self, inputs: np.ndarray) -> np.ndarray:
         """return prediction of the model"""
