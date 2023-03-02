@@ -1,7 +1,7 @@
 import numpy as np
 
 
-class LinearRegression():
+class LinearRegression:
 
     def __init__(self, base_functions: list, reg_coeff: float):
         self.weights = None  # init weights using np.random.randn (normal distribution with mean=0 and variance=1).

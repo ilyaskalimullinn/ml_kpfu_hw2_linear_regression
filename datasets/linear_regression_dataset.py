@@ -1,7 +1,10 @@
 import numpy as np
-from utils.common_functions import read_dataframe_file
 from easydict import EasyDict
-class LinRegDataset():
+
+from utils.common_functions import read_dataframe_file
+
+
+class LinRegDataset:
 
     def __init__(self, cfg: EasyDict):
         advertising_dataframe = read_dataframe_file(cfg.dataframe_path)

@@ -1,10 +1,10 @@
-import plotly.graph_objects as go
 import numpy as np
 
-class Visualisation():
+
+class Visualisation:
 
     @staticmethod
-    def visualise_predicted_trace(prediction:np.ndarray,inputs:np.ndarray,targets:np.ndarray,plot_title=''):
+    def visualise_predicted_trace(prediction: np.ndarray, inputs: np.ndarray, targets: np.ndarray, plot_title=''):
         # visualise predicted trace and targets
         # Last homework, if you haven't done it, you need to do it anyway
         """
@@ -17,5 +17,5 @@ class Visualisation():
         pass
 
     @staticmethod
-    def visualise_best_models(*args,**kwargs):
+    def visualise_best_models(*args, **kwargs):
         pass
