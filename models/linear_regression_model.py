@@ -10,7 +10,6 @@ class LinearRegression:
         self.reg_coeff = reg_coeff
 
     def __pseudoinverse_matrix(self, matrix: np.ndarray) -> np.ndarray:
-        """TODO calculate pseudoinverse matrix with regularization using SVD """
         u, s, v_t = np.linalg.svd(matrix)
 
         sigma_inverse = self.__inverse_diagonal_matrix(diagonal=s, shape_to_be=(v_t.shape[0], u.shape[1]))

@@ -1,25 +1,48 @@
+from typing import List
+from random import Random
+
+import numpy as np
+
 from datasets.linear_regression_dataset import LinRegDataset
 from models.linear_regression_model import LinearRegression
 from utils.metrics import MSE
 from utils.visualisation import Visualisation
+from configs.linear_regression_cfg import cfg as lin_reg_cfg
+
+linreg_dataset = LinRegDataset(lin_reg_cfg)()
+
+inputs_test = linreg_dataset['inputs']['test']
+inputs_train = linreg_dataset['inputs']['train']
+inputs_valid = linreg_dataset['inputs']['valid']
+
+targets_test = linreg_dataset['targets']['test']
+targets_train = linreg_dataset['targets']['train']
+targets_valid = linreg_dataset['targets']['valid']
 
 
-def experiment(lin_reg_cfg, visualise_prediction=True):
-    lin_reg_model = LinearRegression(lin_reg_cfg.base_functions, lin_reg_cfg.regularization_coeff)
-    linreg_dataset = LinRegDataset(lin_reg_cfg)()
+def experiment(base_functions: List, regularization_coeff: float):
+    lin_reg_model = LinearRegression(base_functions, regularization_coeff)
 
-    lin_reg_model.train_model(linreg_dataset['inputs']['train'], linreg_dataset['targets']['train'])
+    lin_reg_model.train_model(inputs_train, targets_train)
 
-    predictions = lin_reg_model(linreg_dataset['inputs']['test'])
-    error = MSE(predictions, linreg_dataset['targets']['test'])
+    predictions = lin_reg_model(inputs_valid)
+    error = MSE(predictions, targets_valid)
 
-    if visualise_prediction:
-        Visualisation.visualise_predicted_trace(predictions,
-                                                linreg_dataset['inputs']['test'],
-                                                linreg_dataset['targets']['test'],
-                                                plot_title=f'Полином степени {len(lin_reg_cfg.base_functions)}; MSE = {round(error, 2)}')
+    return error
 
 
 if __name__ == '__main__':
-    from configs.linear_regression_cfg import cfg as lin_reg_cfg
-    experiment(lin_reg_cfg, visualise_prediction=True)
+    random = Random()
+
+    best_experiments = []
+
+    for i in range(100):
+        max_power = random.randint(5, 200)
+        reg_coeff = 5 * random.random()
+        base_functions = [lambda x, power=i: x ** i for i in range(1, max_power+1)]
+        error = experiment(base_functions=base_functions, regularization_coeff=reg_coeff)
+
+        best_experiments.append((max_power, reg_coeff, error))
+
+    best_experiments.sort(key=lambda exp: exp[2])
+    print(best_experiments[:10])
