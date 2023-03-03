@@ -27,9 +27,9 @@ def validate_model(lin_reg_model: LinearRegression, dataset_type: str) -> float:
 if __name__ == '__main__':
     best_experiments = []
 
-    for i in range(300):
-        max_power = np.random.randint(5, 200)
-        reg_coeff = np.random.uniform(0, 5)
+    number_of_experiments = 300
+
+    for max_power, reg_coeff in zip(np.random.randint(5, 200, number_of_experiments), np.random.uniform(0, 5, number_of_experiments)):
         lin_reg_model = train_model(max_power, reg_coeff)
         valid_error = validate_model(lin_reg_model, dataset_type='valid')
         best_experiments.append(ExperimentResult(max_degree=max_power, reg_coeff=reg_coeff, error_valid=valid_error))
