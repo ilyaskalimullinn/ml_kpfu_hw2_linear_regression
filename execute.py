@@ -1,6 +1,3 @@
-from typing import List
-from random import Random
-
 import numpy as np
 
 from datasets.linear_regression_dataset import LinRegDataset
@@ -26,13 +23,11 @@ def validate_model(lin_reg_model: LinearRegression, dataset_type: str) -> float:
 
 
 if __name__ == '__main__':
-    random = Random()
-
     best_experiments = []
 
     for i in range(300):
-        max_power = random.randint(5, 200)
-        reg_coeff = 5 * random.random()
+        max_power = np.random.randint(5, 200)
+        reg_coeff = np.random.uniform(0, 5)
         lin_reg_model = train_model(max_power, reg_coeff)
         valid_error = validate_model(lin_reg_model, dataset_type='valid')
         best_experiments.append(ExperimentResult(max_degree=max_power, reg_coeff=reg_coeff, error_valid=valid_error))
