@@ -1,3 +1,5 @@
+from typing import List
+
 import numpy as np
 from plotly import graph_objects as go
 
@@ -41,5 +43,5 @@ class Visualisation:
         fig.show()
 
     @staticmethod
-    def visualise_best_models(*args, **kwargs):
+    def visualise_best_models(experiments: List):
         pass
