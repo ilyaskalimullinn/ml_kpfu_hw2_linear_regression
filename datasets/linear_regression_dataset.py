@@ -19,7 +19,7 @@ class LinRegDataset:
         test_size = 1 - train_set_percent - valid_set_percent
         test_size = test_size / (test_size + valid_set_percent)
 
-        self.inputs_valid, self.inputs_test, self.targets_valid, self.targets_test = train_test_split(self.inputs_train, self.targets_train, test_size=test_size)
+        self.inputs_valid, self.inputs_test, self.targets_valid, self.targets_test = train_test_split(self.inputs_test, self.targets_test, test_size=test_size)
 
         # define self.inputs_train, self.targets_train, self.inputs_valid, self.targets_valid, self.inputs_test, self.targets_test
 
