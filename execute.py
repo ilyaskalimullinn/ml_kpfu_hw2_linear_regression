@@ -4,7 +4,7 @@ from random import Random
 import numpy as np
 
 from datasets.linear_regression_dataset import LinRegDataset
-from models.linear_regression_model import LinearRegression
+from models.linear_regression_model import LinearRegression, ExperimentResult
 from utils.metrics import MSE
 from utils.visualisation import Visualisation
 from configs.linear_regression_cfg import cfg as lin_reg_cfg
@@ -27,9 +27,9 @@ def train_model(max_power: int, regularization_coeff: float) -> LinearRegression
     return lin_reg_model
 
 
-def validate_model(lin_reg_model: LinearRegression):
-    predictions = lin_reg_model(inputs_valid)
-    error = MSE(predictions, targets_valid)
+def validate_model(lin_reg_model: LinearRegression, dataset_type: str) -> float:
+    predictions = lin_reg_model(linreg_dataset['inputs'][dataset_type])
+    error = MSE(predictions, linreg_dataset['targets'][dataset_type])
     return error
 
 
@@ -38,18 +38,21 @@ if __name__ == '__main__':
 
     best_experiments = []
 
-    for i in range(300):
+    for i in range(10):
         max_power = random.randint(5, 200)
         reg_coeff = 5 * random.random()
         lin_reg_model = train_model(max_power, reg_coeff)
-        error = validate_model(lin_reg_model)
-        best_experiments.append((max_power, reg_coeff, error))
+        valid_error = validate_model(lin_reg_model, dataset_type='valid')
+        best_experiments.append(ExperimentResult(max_degree=max_power, reg_coeff=reg_coeff, error_valid=valid_error))
 
-    best_experiments.sort(key=lambda exp: exp[2])
+    best_experiments.sort(key=lambda exp: exp.error_valid)
+    best_experiments = best_experiments[:10]
+
+    for exp in best_experiments:
+        lin_reg_model = train_model(exp.max_degree, exp.reg_coeff)
+        test_error = validate_model(lin_reg_model, dataset_type='test')
+        exp.error_test = test_error
+        print(exp)
 
     visualization = Visualisation()
-
-    visualization.visualise_best_models(best_experiments[:10])
-
-    for exp in best_experiments[:10]:
-        print(f"Max polynomial power: {exp[0]}, regularization coefficient: {round(exp[1], 2)}, MSE: {round(exp[2], 2)}")
+    visualization.visualise_best_models(best_experiments)

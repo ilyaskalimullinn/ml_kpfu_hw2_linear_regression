@@ -52,3 +52,17 @@ class LinearRegression:
         predictions = self.calculate_model_prediction(plan_matrix)
 
         return predictions
+
+
+class ExperimentResult:
+    def __init__(self, max_degree: int, reg_coeff: float, error_valid: float = None, error_test: float = None):
+        self.max_degree = max_degree
+        self.reg_coeff = reg_coeff
+        self.error_valid = error_valid
+        self.error_test = error_test
+
+    def __str__(self) -> str:
+        s = f"Max degree: {self.max_degree}, reg coefficient: {self.reg_coeff}, validation error: {self.error_valid}"
+        if self.error_test:
+            s += f", test error: {self.error_test}"
+        return s
