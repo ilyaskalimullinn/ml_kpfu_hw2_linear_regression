@@ -11,19 +11,11 @@ from configs.linear_regression_cfg import cfg as lin_reg_cfg
 
 linreg_dataset = LinRegDataset(lin_reg_cfg)()
 
-inputs_test = linreg_dataset['inputs']['test']
-inputs_train = linreg_dataset['inputs']['train']
-inputs_valid = linreg_dataset['inputs']['valid']
-
-targets_test = linreg_dataset['targets']['test']
-targets_train = linreg_dataset['targets']['train']
-targets_valid = linreg_dataset['targets']['valid']
-
 
 def train_model(max_power: int, regularization_coeff: float) -> LinearRegression:
-    base_functions = [lambda x, power=i: x ** i for i in range(1, max_power + 1)]
+    base_functions = [lambda x, power=i: x ** power for i in range(1, max_power + 1)]
     lin_reg_model = LinearRegression(base_functions, regularization_coeff)
-    lin_reg_model.train_model(inputs_train, targets_train)
+    lin_reg_model.train_model(linreg_dataset['inputs']['train'], linreg_dataset['targets']['train'])
     return lin_reg_model
 
 
