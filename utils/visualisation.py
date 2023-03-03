@@ -11,16 +11,27 @@ from models.linear_regression_model import ExperimentResult
 class Visualisation:
 
     @staticmethod
-    def visualise_predicted_trace(prediction: np.ndarray, inputs: np.ndarray, targets: np.ndarray, plot_title=''):
+    def visualise_predicted_trace(predictions: List[np.ndarray],
+                                  inputs: np.ndarray,
+                                  targets: np.ndarray,
+                                  labels: List[str],
+                                  plot_title=''):
         # visualise predicted trace and targets
         # Last homework, if you haven't done it, you need to do it anyway
         """
 
-        :param prediction: model prediction based on inputs (oy for one trace)
+        :param predictions: list of different models predictions based on inputs (oy for one trace)
         :param inputs: inputs variables (ox for both)
         :param targets: target variables (oy for one trace)
+        :param labels: labels of different predictions
         :param plot_title: plot title
         """
+
+        df = pd.DataFrame(list(zip(*predictions)), columns=labels)
+        df['inputs'] = inputs
+        df['targets'] = targets
+        df = df.sort_values(by='inputs')
+
         fig = go.Figure()
 
         fig.add_trace(go.Scatter(
@@ -30,12 +41,13 @@ class Visualisation:
             name='Фактические наблюдения'
         ))
 
-        fig.add_trace(go.Scatter(
-            x=inputs,
-            y=prediction,
-            mode='markers',
-            name="Предсказания модели",
-        ))
+        for label in labels:
+            fig.add_trace(go.Scatter(
+                x=df['inputs'],
+                y=df[label],
+                mode='lines',
+                name=label,
+            ))
 
         fig.update_layout(
             title=plot_title,

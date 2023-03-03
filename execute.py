@@ -30,7 +30,7 @@ if __name__ == '__main__':
 
     best_experiments = []
 
-    for i in range(10):
+    for i in range(300):
         max_power = random.randint(5, 200)
         reg_coeff = 5 * random.random()
         lin_reg_model = train_model(max_power, reg_coeff)
@@ -48,3 +48,16 @@ if __name__ == '__main__':
 
     visualization = Visualisation()
     visualization.visualise_best_models(best_experiments)
+
+    model_with_reg = train_model(100, 0)
+    model_without_reg = train_model(100, 1e-5)
+
+    predictions_with_reg = model_with_reg(linreg_dataset['inputs']['test'])
+    predictions_without_reg = model_without_reg(linreg_dataset['inputs']['test'])
+
+    visualization.visualise_predicted_trace(predictions=[predictions_with_reg, predictions_without_reg],
+                                            inputs=linreg_dataset['inputs']['test'],
+                                            targets=linreg_dataset['targets']['test'],
+                                            labels=['Модель с коэффициентом регуляризации = 0', 'Модель с коэффициентом регуляризации = 1e-5'],
+                                            plot_title='Предсказания моделей с максимальной степенью полинома 100 и '
+                                                       'разными коэффициентами регуляризации')
