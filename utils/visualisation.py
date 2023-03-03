@@ -15,6 +15,7 @@ class Visualisation:
                                   inputs: np.ndarray,
                                   targets: np.ndarray,
                                   labels: List[str],
+                                  save_path: str = None,
                                   plot_title=''):
         # visualise predicted trace and targets
         # Last homework, if you haven't done it, you need to do it anyway
@@ -24,6 +25,7 @@ class Visualisation:
         :param inputs: inputs variables (ox for both)
         :param targets: target variables (oy for one trace)
         :param labels: labels of different predictions
+        :param save_path: a path to save graph
         :param plot_title: plot title
         """
 
@@ -57,10 +59,11 @@ class Visualisation:
         )
 
         fig.show()
+        if save_path:
+            fig.write_html(save_path)
 
     @staticmethod
-    def visualise_best_models(experiments: List[ExperimentResult]):
-
+    def visualise_best_models(experiments: List[ExperimentResult], save_path: str = None):
         df = pd.DataFrame({
             "degree": [exp.max_degree for exp in experiments],
             "valid_error": [round(exp.error_valid, 2) for exp in experiments],
@@ -90,3 +93,5 @@ class Visualisation:
         )
 
         fig.show()
+        if save_path:
+            fig.write_html(save_path)

@@ -1,3 +1,5 @@
+import os.path
+
 import numpy as np
 
 from datasets.linear_regression_dataset import LinRegDataset
@@ -42,7 +44,8 @@ if __name__ == '__main__':
         print(exp)
 
     visualization = Visualisation()
-    visualization.visualise_best_models(best_experiments)
+    ROOT_DIR = os.path.abspath(os.curdir)
+    visualization.visualise_best_models(best_experiments, save_path=os.path.join(ROOT_DIR, 'graphs/best_models.html'))
 
     model_with_reg = train_model(100, 0)
     model_without_reg = train_model(100, 1e-5)
@@ -54,5 +57,6 @@ if __name__ == '__main__':
                                             inputs=linreg_dataset['inputs']['test'],
                                             targets=linreg_dataset['targets']['test'],
                                             labels=['Модель с коэффициентом регуляризации = 0', 'Модель с коэффициентом регуляризации = 1e-5'],
+                                            save_path=os.path.join(ROOT_DIR, 'graphs/models_predictions.html'),
                                             plot_title='Предсказания моделей с максимальной степенью полинома 100 и '
                                                        'разными коэффициентами регуляризации')
