@@ -19,7 +19,14 @@ class LinearRegression:
     def __inverse_diagonal_matrix(self, diagonal: np.ndarray, shape_to_be: Tuple):
         min_value = np.finfo(float).eps * np.max(diagonal) * max(shape_to_be)
 
+        if diagonal[0] > min_value:
+            a = 1 / diagonal[0]
+        else:
+            a = 0
+
         diagonal_inverse = np.where(diagonal > min_value, diagonal / (diagonal ** 2 + self.reg_coeff), 0)
+
+        diagonal_inverse[0] = a
 
         matrix = np.zeros(shape=shape_to_be)
         np.fill_diagonal(matrix, diagonal_inverse)

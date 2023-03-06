@@ -21,15 +21,6 @@ class LinRegDataset:
 
         self.inputs_valid, self.inputs_test, self.targets_valid, self.targets_test = train_test_split(self.inputs_test, self.targets_test, test_size=test_size)
 
-        # self.inputs_valid = np.sort(self.inputs_valid)
-        # self.inputs_train = np.sort(self.inputs_train)
-        # self.inputs_test = np.sort(self.inputs_test)
-        # self.targets_valid = np.sort(self.targets_valid)
-        # self.targets_train = np.sort(self.targets_train)
-        # self.targets_test = np.sort(self.targets_test)
-
-        # define self.inputs_train, self.targets_train, self.inputs_valid, self.targets_valid, self.inputs_test, self.targets_test
-
     def __call__(self) -> dict:
         return {'inputs': {'train': self.inputs_train,
                            'valid': self.inputs_valid,
